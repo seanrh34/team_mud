@@ -55,7 +55,7 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
   const imageData = canvas.toDataURL('image/jpeg');
   setCapturedImage(imageData);
 
-  const response = await(fetch('http://localhost:5001/predict', {
+  const response = await(fetch('https://fb62-137-132-26-135.ngrok-free.app/predict', {
     method : 'POST', 
     headers: {
       'Content-Type' : 'application/json',

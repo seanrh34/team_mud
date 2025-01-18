@@ -6,6 +6,7 @@ import './globals.css';
 import { Timer } from './timer/timer';
 import { LONG_BREAK, SHORT_BREAK, WORK } from './constants';
 import WebcamStateUpdater from "./webcam/backgroundWebcam";
+import ProgressBar from "./components/ProgressBar";
 
 export type pomodoro = "work" | "shortBreak" | "longBreak";
 
@@ -88,8 +89,6 @@ export default function Home() {
   }
   console.log(`Sleeptracker: ${sleepTracker}`);
 
-
-
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <h1>Pomodoro Timer</h1>
@@ -120,8 +119,12 @@ export default function Home() {
           </button>
         </div>
       )}
+      <div className='my-4'>
+        <ProgressBar sleepTracker={sleepTracker} sleepThreshold={sleepThreshold} />
+      </div>
+      
       <WebcamStateUpdater setSleepTracker={setSleepTracker} sleepTracker={sleepTracker}/>
-     
+      
     </div>
   );
 
