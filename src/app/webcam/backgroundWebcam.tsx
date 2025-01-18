@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from "react";
 interface WebcamCaptureProps {
   setSleepTracker: React.Dispatch<React.SetStateAction<number>>;
   sleepTracker: number;
+  isRunning : boolean
 }
 
 
-const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sleepTracker }) => {
+const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sleepTracker, isRunning}) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
 
@@ -67,11 +68,11 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
   console.log(result.status);
 
   if (result.status === 1){
-    setSleepTracker(curSleepTracker => {return curSleepTracker + 1})
+    setSleepTracker(curSleepTracker => {return isRunning ? curSleepTracker + 1 : curSleepTracker})
   }
   else if (result.status === 0){
     setSleepTracker(curSleepTracker => {
-      return curSleepTracker > 0 ? curSleepTracker - 1 : curSleepTracker
+      return (curSleepTracker > 0 && sleepTracker < 10 )? curSleepTracker - 1 : curSleepTracker
     })
   }
   };
