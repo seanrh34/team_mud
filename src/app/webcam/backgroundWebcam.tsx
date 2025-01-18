@@ -56,13 +56,13 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
   const imageData = canvas.toDataURL('image/jpeg');
   setCapturedImage(imageData);
 
-  const response = await(fetch('http://localhost:5001/predict', {
-    method : 'POST', 
+  const response = await fetch('http://localhost:5001/predict', {
+    method: 'POST',
     headers: {
-      'Content-Type' : 'application/json',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({image: imageData}),
-  }));
+    body: JSON.stringify({ image: imageData }),
+  });
   
   const result = await response.json();
   console.log("result status: " + result.status);
@@ -71,7 +71,7 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
     console.log("isRunning in backgroundWebcam: ", isRunning)
     setSleepTracker(curSleepTracker  => {
       console.log("Cur sleep tracker: "+ curSleepTracker)
-        return isRunning ? curSleepTracker + 1: curSleepTracker})
+        return  isRunning ? curSleepTracker + 1: curSleepTracker})
   }
   else if (result.status === 0){
     setSleepTracker(curSleepTracker => {
@@ -87,7 +87,7 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
       captureFrame,1000);
     return () => clearInterval(intervalId);
 
-  },[])
+  }, [isRunning])
   return <video ref={videoRef} width="640" height="480" autoPlay style={{ display: 'none' }}>{capturedImage}</video>;
 }
 

@@ -91,7 +91,7 @@ export default function Home() {
       console.log("You lasted for: ", timeElapsed);
       playSound();
     }
-  });
+  }, [getOriginalTime, isRunning, remainingTime, sleepTracker, timeElapsed]);
 
   let TimerContent: React.ReactElement | null = null;
 
@@ -105,7 +105,7 @@ export default function Home() {
           autoStart={false}
           pomodoro={pomodoro}
           setInterval={setInterval}
-          setParentIsRunning={setIsRunning}
+          setIsRunning={setIsRunning}
           onRemainingTimeChange={handleRemainingTimeChange} // Track remaining time
         />
       </div>
@@ -119,7 +119,7 @@ export default function Home() {
         autoStart={false}
         setInterval={setInterval}
         pomodoro={pomodoro}
-        setParentIsRunning={setIsRunning}
+        setIsRunning={setIsRunning}
       />
     );
   } else if (pomodoro === "longBreak") {
@@ -131,7 +131,7 @@ export default function Home() {
         autoStart={false}
         setInterval={setInterval}
         pomodoro={pomodoro}
-        setParentIsRunning={setIsRunning}
+        setIsRunning={setIsRunning}
       />
     );
   }

@@ -8,7 +8,7 @@ interface TimerProps {
   autoStart: boolean;
   setInterval: React.Dispatch<React.SetStateAction<number>>;
   pomodoro: pomodoro;
-  setParentIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
   onRemainingTimeChange?: (remainingSeconds: number) => void; // New callback prop
 }
 
@@ -17,7 +17,7 @@ export function Timer({
   autoStart,
   setInterval,
   pomodoro,
-  setParentIsRunning,
+  setIsRunning,
   onRemainingTimeChange, // Destructure new prop
 }: TimerProps) {
   const {
@@ -59,8 +59,8 @@ export function Timer({
   }, [seconds, minutes, hours, onRemainingTimeChange]);
 
   useEffect(() => {
-    setParentIsRunning(isRunning);
-  }, [isRunning, setParentIsRunning]);
+    setIsRunning(isRunning);
+  }, [isRunning, setIsRunning]);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -73,7 +73,8 @@ export function Timer({
           className="m-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           onClick={() => {
             pause();
-            setParentIsRunning(!isRunning);
+            setIsRunning(!isRunning);
+
           }}
         >
           Pause
@@ -83,7 +84,7 @@ export function Timer({
           className="m-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           onClick={() => {
             start();
-            setParentIsRunning(!isRunning);
+            setIsRunning(!isRunning);
           }}
         >
           Start
@@ -103,8 +104,9 @@ export function Timer({
               : 0;
           time.setSeconds(time.getSeconds() + addTime);
           console.log(time, minutes * 60);
+          setIsRunning(!isRunning);
+          
           restart(time, autoStart);
-          setParentIsRunning(!isRunning);
         }}
       >
         Restart
