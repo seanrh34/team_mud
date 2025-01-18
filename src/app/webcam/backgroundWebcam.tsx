@@ -40,7 +40,7 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
   },[]);
 
   const captureFrame = async() => {
-    console.log("second step!")
+    // console.log("second step!")
     if (!videoRef.current) return;
 
     const canvas = document.createElement('canvas')
@@ -64,17 +64,26 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
   }));
   
   const result = await response.json();
-  console.log(result);
+  // console.log(result.status);
+
+  if (result.status === 1){
+    setSleepTracker(curSleepTracker => {return curSleepTracker + 1})
+  }
+  else if (result.status === 0){
+    setSleepTracker(curSleepTracker => {
+      return curSleepTracker > 0 ? curSleepTracker -1 : curSleepTracker
+    })
+  }
   };
 
 
   useEffect(() => {
-    console.log("first step!")
+    // console.log("first step!")
     const intervalId = setInterval(
       captureFrame,1000);
     return () => clearInterval(intervalId);
 
-  },[])
+  })
   return <video ref={videoRef} width="640" height="480" autoPlay style={{ display: 'none' }}></video>;
 }
 

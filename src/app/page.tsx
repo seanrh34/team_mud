@@ -1,6 +1,6 @@
 "use client"; // Mark this as a client component
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import './globals.css';
 import { Timer } from './timer/timer';
 import { LONG_BREAK, SHORT_BREAK, WORK } from './constants';
@@ -14,11 +14,28 @@ export default function Home() {
   const [interval, setInterval] = React.useState<number>(0);
   const [pomodoro, setPomodoro] = React.useState<pomodoro>("work");
    const [sleepTracker, setSleepTracker] = React.useState<number>(0);
-   const [isSleeping, setIsSleeping] = React.useState<boolean>(false);
+   const [isSleep, setIsSleep] = React.useState<boolean>(false);
   // interval is in seconds
 
+  const sleepThreshold = 3;
+
+  useEffect(() => {
+    if (sleepTracker >= sleepThreshold) {
+      setIsSleep(true);
+    }
+    else {
+      setIsSleep(false);
+    }
+  }, [sleepTracker])
 
   let TimerContent: React.ReactElement | null = null;
+  
+  const playSound = () => {
+    const audio = new Audio("./src/app/assets/OIIAIOIIIAI (spinning cat meme).mp3")
+    audio.play().catch((err) => {
+      console.error("failed to played sound", err);
+    })
+  }
 
   if (pomodoro === "work") {
     // setIsPomodoro(true);
@@ -55,6 +72,8 @@ export default function Home() {
   }
   console.log(`Sleeptracker: ${sleepTracker}`);
 
+
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <h1>Pomodoro Timer</h1>
@@ -71,6 +90,24 @@ export default function Home() {
         </div>
         
       {TimerContent}
+      {isSleep && (
+        <div className="bg-red-500 text-white p-4 mt-4 rounded">
+          <button 
+            className="hidden"
+            onClick={playSound}
+          />
+          Alert: Value has reached or exceeded the threshold of {sleepThreshold}!
+          <button 
+            className="ml-4 px-4 py-2 bg-white text-red-500 rounded"
+            onClick={() => {
+              setIsSleep(false);
+              setSleepTracker(0);
+            }}
+          >
+            CLICK TO RESET
+          </button>
+        </div>
+      )}
       <WebcamStateUpdater setSleepTracker={setSleepTracker} sleepTracker={sleepTracker}/>
      
     </div>
