@@ -1,4 +1,4 @@
-from drowsydetector import *
+from backend.api_backend.drowsydetector import *
 
 def main():
     # video_path = "test.mp4"

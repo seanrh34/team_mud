@@ -1,4 +1,6 @@
+"use client"; // Mark this as a client component
 import React, { useRef, useState, useEffect } from "react";
+import Image from 'next/image';
 
 const WebcamCapture: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -31,8 +33,12 @@ const WebcamCapture: React.FC = () => {
 
   // Function to capture a frame and send to the backend
   const captureFrame = async () => {
+    if (!videoRef.current) return;
+
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
+    if (!context) return;
+
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
     context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
@@ -42,7 +48,7 @@ const WebcamCapture: React.FC = () => {
     setCapturedImage(imageData);
 
     // Send the captured image to the backend
-    const response = await fetch('http://localhost:5000/predict', {
+    const response = await fetch('http://localhost:5001/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -53,6 +59,7 @@ const WebcamCapture: React.FC = () => {
     const result = await response.json();
     console.log(result);
   };
+
   useEffect(() => {
     const intervalId = setInterval(captureFrame, 1000); // Capture frame every 5 seconds
 
@@ -62,8 +69,15 @@ const WebcamCapture: React.FC = () => {
   return (
     <div>
       <video ref={videoRef} width="640" height="480" autoPlay></video>
-      <button onClick={captureFrame}>Capture and Process Frame</button>
-      {capturedImage && <img src={capturedImage} alt="Captured frame" />}
+      <button onClick={captureFrame}>Capture Frame</button>
+      {capturedImage && (
+        <Image
+          src={capturedImage}
+          alt="Captured frame"
+          width={videoRef.current?.videoWidth || 0}
+          height={videoRef.current?.videoHeight || 0}
+        />
+      )}
     </div>
   );
 };

@@ -17,13 +17,18 @@ import face_recognition
 from scipy.spatial import distance
 
 # add logging to the app
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
 logger = logging.getLogger(__name__)
 
 
 class Status(Enum):
-    SLEEPING = 0
-    AWAKE = 1
+    SLEEPING = 1
+    AWAKE = 0
 
 
 # Initialize FastAPI
@@ -80,4 +85,4 @@ async def predict(data: ImageData):
         raise HTTPException(status_code=400, detail="Error processing the image")
 
 if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=5001)

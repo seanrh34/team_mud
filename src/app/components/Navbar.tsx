@@ -13,6 +13,9 @@ export default function Navbar() {
         <li>
           <Link href="/leaderboard">Leaderboard</Link>
         </li>
+        {/* <li>
+          <Link href="/webcam">Webcam</Link>
+        </li> */}
       </ul>
     </nav>
   );

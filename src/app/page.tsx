@@ -4,6 +4,7 @@ import React from 'react';
 import './globals.css';
 import { Timer } from './timer/timer';
 import { LONG_BREAK, SHORT_BREAK, WORK } from './constants';
+import WebcamStateUpdater from "./webcam/backgroundWebcam";
 
 export type pomodoro = "work" | "shortBreak" | "longBreak";
 
@@ -11,8 +12,9 @@ export default function Home() {
 
   // const [minute, setMinute] = React.useState<number>(30);
   const [interval, setInterval] = React.useState<number>(0);
-  const [isPomodoro, setIsPomodoro] = React.useState<boolean>(true);
   const [pomodoro, setPomodoro] = React.useState<pomodoro>("work");
+   const [sleepTracker, setSleepTracker] = React.useState<number>(0);
+   const [isSleeping, setIsSleeping] = React.useState<boolean>(false);
   // interval is in seconds
 
 
@@ -51,23 +53,26 @@ export default function Home() {
     <Timer expiryTimestamp={time} autoStart={false} setInterval = {setInterval} pomodoro={pomodoro}/>
     )
   }
+  console.log(`Sleeptracker: ${sleepTracker}`);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <h1>Pomodoro Timer</h1>
         <span>Interval is {interval}</span>
         <div>
-        <button onClick={() => {setPomodoro("work");setIsPomodoro(true);}}>Work</button>
+        <button onClick={() => {setPomodoro("work");}}>Work</button>
         
         {pomodoro === "work" && 
           <span>
-          <button onClick={() => {setPomodoro("shortBreak");setIsPomodoro(false)}}>Short Break</button>
-          <button onClick={() => {setPomodoro("longBreak"); setIsPomodoro(true)}}>Long Break</button>
+          <button onClick={() => {setPomodoro("shortBreak");}}>Short Break</button>
+          <button onClick={() => {setPomodoro("longBreak"); }}>Long Break</button>
           </span>
         }
         </div>
         
       {TimerContent}
+      <WebcamStateUpdater setSleepTracker={setSleepTracker} sleepTracker={sleepTracker}/>
+     
     </div>
   );
 
