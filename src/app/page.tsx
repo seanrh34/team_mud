@@ -1,7 +1,7 @@
 "use client"; // Mark this as a client component
 
 import React, { useEffect, useRef, useState } from "react";
-import sound from "/alert.mp3";
+// import sound from "/alert.mp3";
 import "./globals.css";
 import { Timer } from "./timer/timer";
 import { LONG_BREAK, SHORT_BREAK, SLEEPTHRESHOLD, WORK } from "./constants";
@@ -17,7 +17,7 @@ export default function Home() {
   const [pomodoro, setPomodoro] = useState<pomodoro>("work");
   const [sleepTracker, setSleepTracker] = useState<number>(0);
   const [isSleep, setIsSleep] = useState<boolean>(false);
-  const [isRunning, setParentIsRunning] = useState<boolean>(false);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
   const [name, setName] = useState<string>(""); // Default value is an empty string
   const [remainingTime, setRemainingTime] = useState<number>(0); // Current time left in seconds
   const [timeElapsed, setTimeElapsed] = useState<number>(0); // Current time left in seconds
@@ -85,13 +85,13 @@ export default function Home() {
     if (sleepTracker >= SLEEPTHRESHOLD) {
       setIsSleep(true);
       if (isRunning) {
-        setParentIsRunning(false); // This will stop the timer
+        setIsRunning(false); // This will stop the timer
       }
       setTimeElapsed(getOriginalTime() - remainingTime);
       console.log("You lasted for: ", timeElapsed);
       playSound();
     }
-  }, [sleepTracker]);
+  });
 
   let TimerContent: React.ReactElement | null = null;
 
@@ -105,13 +105,8 @@ export default function Home() {
           autoStart={false}
           pomodoro={pomodoro}
           setInterval={setInterval}
-          setParentIsRunning={setParentIsRunning}
+          setParentIsRunning={setIsRunning}
           onRemainingTimeChange={handleRemainingTimeChange} // Track remaining time
-        />
-        <WebcamStateUpdater
-          setSleepTracker={setSleepTracker}
-          sleepTracker={sleepTracker}
-          isRunning={isRunning}
         />
       </div>
     );
@@ -124,7 +119,7 @@ export default function Home() {
         autoStart={false}
         setInterval={setInterval}
         pomodoro={pomodoro}
-        setParentIsRunning={setParentIsRunning}
+        setParentIsRunning={setIsRunning}
       />
     );
   } else if (pomodoro === "longBreak") {
@@ -136,12 +131,13 @@ export default function Home() {
         autoStart={false}
         setInterval={setInterval}
         pomodoro={pomodoro}
-        setParentIsRunning={setParentIsRunning}
+        setParentIsRunning={setIsRunning}
       />
     );
   }
 
   console.log(`Sleeptracker: ${sleepTracker}`);
+  console.log("isRunning: ", isRunning);
 
   const handleNameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -154,6 +150,11 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center p-6 space-y-4">
+        <WebcamStateUpdater
+          setSleepTracker={setSleepTracker}
+          sleepTracker={sleepTracker}
+          isRunning={isRunning}
+        />
       {showNamePrompt && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
