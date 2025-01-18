@@ -13,7 +13,7 @@ export default function Leaderboard() {
       const { data, error } = await supabase
         .from("leaderboard")
         .select("name, duration, published")
-        .order("duration", { ascending: false }); // Sort by duration in descending order
+        .order("duration", { ascending: false }) // Sort by duration in descending order
 
       if (error) {
         console.error("Error fetching leaderboard:", error.message);
@@ -42,59 +42,28 @@ export default function Leaderboard() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className="text-center text-lg font-medium">Loading...</p>;
   }
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "2rem" }}>Leaderboard</h1>
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          margin: "0 auto",
-          maxWidth: "600px",
-        }}
-      >
+    <div className="p-8">
+      <h1 className="text-center text-3xl font-bold mb-8">Leaderboard</h1>
+      <table className="w-full max-w-4xl mx-auto border-collapse border border-gray-300 text-center">
         <thead>
-          <tr style={{ backgroundColor: "#f8f9fa" }}>
-            <th style={{ border: "1px solid #ccc", padding: "0.75rem" }}>Rank</th>
-            <th style={{ border: "1px solid #ccc", padding: "0.75rem" }}>Name</th>
-            <th style={{ border: "1px solid #ccc", padding: "0.75rem" }}>Duration</th>
-            <th style={{ border: "1px solid #ccc", padding: "0.75rem" }}>Published</th>
+          <tr className="bg-gray-900 text-white">
+            <th className="border border-gray-300 px-4 py-2">Rank</th>
+            <th className="border border-gray-300 px-4 py-2">Name</th>
+            <th className="border border-gray-300 px-4 py-2">Duration</th>
+            <th className="border border-gray-300 px-4 py-2">Published</th>
           </tr>
         </thead>
         <tbody>
           {leaderboardData.map((player) => (
-            <tr key={player.rank}>
-              <td
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "0.75rem",
-                  textAlign: "center",
-                }}
-              >
-                {player.rank}
-              </td>
-              <td style={{ border: "1px solid #ccc", padding: "0.75rem" }}>
-                {player.name}
-              </td>
-              <td
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "0.75rem",
-                  textAlign: "center",
-                }}
-              >
-                {player.duration}
-              </td>
-              <td
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "0.75rem",
-                  textAlign: "center",
-                }}
-              >
+            <tr key={player.rank} className="even:bg-gray-700 odd:bg-gray-800">
+              <td className="border border-gray-300 px-4 py-2">{player.rank}</td>
+              <td className="border border-gray-300 px-4 py-2">{player.name}</td>
+              <td className="border border-gray-300 px-4 py-2">{player.duration}</td>
+              <td className="border border-gray-300 px-4 py-2">
                 {formatDate(player.published)}
               </td>
             </tr>

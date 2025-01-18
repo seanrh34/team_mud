@@ -42,3 +42,6 @@ next-env.d.ts
 
 # venv
 backend/drowsy/venv
+src/app/webcam/backgroundWebcam.tsx
+src/app/webcam/page.tsx
+src/app/webcam/page.tsx

@@ -5,5 +5,5 @@ export const LONG_BREAK = 10;
 export const WORK = 60 * 30;
 
 
-export const SLEEPTHRESHOLD = 3;
+export const SLEEPTHRESHOLD = 5;
 // export const 

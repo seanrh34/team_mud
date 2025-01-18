@@ -1,8 +1,9 @@
 export default function Footer() {
-    return (
-      <footer style={{ padding: '1rem', backgroundColor: '#f1f1f1', textAlign: 'center' }}>
-        <p>&copy; {new Date().getFullYear()} My Next.js App. All rights reserved.</p>
-      </footer>
-    );
-  }
-  
+  return (
+    <footer
+      className="w-full p-4 text-center bg-gray-800 text-white text-sm"
+    >
+      <p>&copy; {new Date().getFullYear()} Team M.U.D.'s submission for HackNRoll 2025. All rights reserved.</p>
+    </footer>
+  );
+}

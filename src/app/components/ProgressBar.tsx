@@ -11,22 +11,20 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ sleepTracker, sleepThreshold 
 
   if (percentage >= 100) {
     colorClass = "bg-red-600"; // Red for 100% or more
-  } else if (percentage >= 75) {
+  } else if (percentage >= 50) {
     colorClass = "bg-yellow-500"; // Yellow for 75% or more
   }
 
   return (
-    <div>
+    <div className="w-full max-w-4xl">
       <div className="flex justify-between mb-1">
         <p>Doze Meter</p>
-        <span className="text-base font-medium text-blue-700 dark:text-white">Sleep Tracker</span>
-        <span className="text-sm font-medium text-blue-700 dark:text-white">{${Math.round(percentage)}%}</span>
-        <p>{${Math.round(percentage)}%}</p>
+        <span className="text-sm font-medium text-blue-700 dark:text-white">{`${Math.round(percentage)}%`}</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
         <div
-          className={${colorClass} h-2.5 rounded-full}
-          style={{ width: ${percentage}% }}
+          className={`${colorClass} h-2.5 rounded-full`}
+          style={{ width: `${percentage}%` }}
         ></div>
       </div>
     </div>
