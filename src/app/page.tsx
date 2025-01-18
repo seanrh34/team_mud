@@ -1,14 +1,74 @@
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+"use client"; // Mark this as a client component
+
+import React from 'react';
+import './globals.css';
+import { Timer } from './timer/timer';
+import { LONG_BREAK, SHORT_BREAK, WORK } from './constants';
+
+export type pomodoro = "work" | "shortBreak" | "longBreak";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <Navbar />
-      <div>
-        
+
+  // const [minute, setMinute] = React.useState<number>(30);
+  const [interval, setInterval] = React.useState<number>(0);
+  const [isPomodoro, setIsPomodoro] = React.useState<boolean>(true);
+  const [pomodoro, setPomodoro] = React.useState<pomodoro>("work");
+  // interval is in seconds
+
+
+  let TimerContent: React.ReactElement | null = null;
+
+  if (pomodoro === "work") {
+    // setIsPomodoro(true);
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + WORK);
+    TimerContent = (
+      <div className="relative bg-gray-900">
+        <Timer expiryTimestamp={time} autoStart={false} pomodoro = {pomodoro}setInterval = {setInterval}/>
+        {/* <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+          <h1 className="text-4xl font-bold text-blue-600">Welcome to Next.js with Tailwind CSS</h1>
+          <p className="mt-4 text-gray-700">This is a sample project.</p>
+          <button className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Click Me
+          </button>
+        </div> */}
       </div>
-      <Footer />
+    );
+  }
+  else if (pomodoro === "shortBreak") {
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + SHORT_BREAK);
+    TimerContent = (
+    <Timer expiryTimestamp={time} autoStart={false} setInterval = {setInterval} pomodoro={pomodoro}/>
+    )
+  }
+
+  else if (pomodoro === "longBreak") {
+    
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + LONG_BREAK);
+    TimerContent = (
+    <Timer expiryTimestamp={time} autoStart={false} setInterval = {setInterval} pomodoro={pomodoro}/>
+    )
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <h1>Pomodoro Timer</h1>
+        <span>Interval is {interval}</span>
+        <div>
+        <button onClick={() => {setPomodoro("work");setIsPomodoro(true);}}>Work</button>
+        
+        {pomodoro === "work" && 
+          <span>
+          <button onClick={() => {setPomodoro("shortBreak");setIsPomodoro(false)}}>Short Break</button>
+          <button onClick={() => {setPomodoro("longBreak"); setIsPomodoro(true)}}>Long Break</button>
+          </span>
+        }
+        </div>
+        
+      {TimerContent}
     </div>
   );
+
 }
