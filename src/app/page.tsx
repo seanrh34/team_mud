@@ -9,6 +9,7 @@ import WebcamStateUpdater from "./webcam/backgroundWebcam";
 import ProgressBar from "./components/ProgressBar";
 import { supabase } from "./lib/supabaseClient";
 import Link from "next/link";
+import { TimerBreak } from "./timer/timerBreak";
 
 export type pomodoro = "work" | "shortBreak" | "longBreak";
 
@@ -107,6 +108,7 @@ export default function Home() {
           setInterval={setInterval}
           setIsRunning={setIsRunning}
           onRemainingTimeChange={handleRemainingTimeChange} // Track remaining time
+          setSleepTracker = {setSleepTracker}
         />
       </div>
     );
@@ -114,24 +116,22 @@ export default function Home() {
     const time = new Date();
     time.setSeconds(time.getSeconds() + SHORT_BREAK);
     TimerContent = (
-      <Timer
+      <TimerBreak
         expiryTimestamp={time}
         autoStart={false}
         setInterval={setInterval}
         pomodoro={pomodoro}
-        setIsRunning={setIsRunning}
       />
     );
   } else if (pomodoro === "longBreak") {
     const time = new Date();
     time.setSeconds(time.getSeconds() + LONG_BREAK);
     TimerContent = (
-      <Timer
+      <TimerBreak
         expiryTimestamp={time}
         autoStart={false}
         setInterval={setInterval}
         pomodoro={pomodoro}
-        setIsRunning={setIsRunning}
       />
     );
   }
@@ -209,7 +209,7 @@ export default function Home() {
       </div>
       {TimerContent}
       <div className="w-full my-4 flex justify-center">
-        <ProgressBar sleepTracker={sleepTracker} sleepThreshold={SLEEPTHRESHOLD} />
+        {pomodoro === "work" && <ProgressBar sleepTracker={sleepTracker} sleepThreshold={SLEEPTHRESHOLD} />}
       </div>
       {isSleep && (
         <div className="bg-red-500 text-white p-4 mt-4 rounded shadow-md">

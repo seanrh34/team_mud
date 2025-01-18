@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTimer } from 'react-timer-hook';
 import { LONG_BREAK, SHORT_BREAK, WORK } from '../constants';
 import { pomodoro } from '../page';
@@ -8,19 +8,14 @@ interface TimerProps {
   autoStart: boolean;
   setInterval: React.Dispatch<React.SetStateAction<number>>;
   pomodoro: pomodoro;
-  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
-  setSleepTracker : React.Dispatch<React.SetStateAction<number>>;
   onRemainingTimeChange?: (remainingSeconds: number) => void; // New callback prop
 }
 
-export function Timer({
+export function TimerBreak({
   expiryTimestamp,
   autoStart,
   setInterval,
   pomodoro,
-  setIsRunning,
-  setSleepTracker,
-  onRemainingTimeChange, // Destructure new prop
 }: TimerProps) {
   const {
     seconds,
@@ -52,17 +47,6 @@ export function Timer({
     },
   });
 
-  // Notify parent of the remaining time in seconds
-  useEffect(() => {
-    if (onRemainingTimeChange) {
-      const totalRemainingSeconds = hours * 3600 + minutes * 60 + seconds;
-      onRemainingTimeChange(totalRemainingSeconds);
-    }
-  }, [seconds, minutes, hours, onRemainingTimeChange]);
-
-  useEffect(() => {
-    setIsRunning(isRunning);
-  }, [isRunning, setIsRunning]);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -75,8 +59,6 @@ export function Timer({
           className="m-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           onClick={() => {
             pause();
-            setIsRunning(false);
-            setSleepTracker(0); //resets doze counter
           }}
         >
           Pause
@@ -86,7 +68,6 @@ export function Timer({
           className="m-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           onClick={() => {
             start();
-            setIsRunning(true);
           }}
         >
           Start
@@ -106,8 +87,6 @@ export function Timer({
               : 0;
           time.setSeconds(time.getSeconds() + addTime);
           console.log(time, minutes * 60);
-          setIsRunning(false);
-          setSleepTracker(0); //resets doze counter
           restart(time, autoStart);
         }}
       >
