@@ -64,14 +64,14 @@ const WebcamStateUpdater: React.FC<WebcamCaptureProps> = ({ setSleepTracker, sle
   }));
   
   const result = await response.json();
-  // console.log(result.status);
+  console.log(result.status);
 
   if (result.status === 1){
     setSleepTracker(curSleepTracker => {return curSleepTracker + 1})
   }
   else if (result.status === 0){
     setSleepTracker(curSleepTracker => {
-      return curSleepTracker > 0 ? curSleepTracker -1 : curSleepTracker
+      return curSleepTracker > 0 ? curSleepTracker - 1 : curSleepTracker
     })
   }
   };
