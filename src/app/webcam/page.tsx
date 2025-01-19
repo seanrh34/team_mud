@@ -48,7 +48,7 @@ const WebcamCapture: React.FC = () => {
     setCapturedImage(imageData);
 
     // Send the captured image to the backend
-    const response = await fetch('https://fb62-137-132-26-135.ngrok-free.app/predict', {
+    const response = await fetch('http://localhost:5001/predict', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

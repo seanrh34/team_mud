@@ -117,6 +117,7 @@ export default function Home() {
           setIsRunning={setIsRunning}
           onRemainingTimeChange={handleRemainingTimeChange} // Track remaining time
           setSleepTracker = {setSleepTracker}
+          isSleep={isSleep}
         />
       </div>
     );

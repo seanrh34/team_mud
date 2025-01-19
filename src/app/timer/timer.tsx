@@ -11,6 +11,7 @@ interface TimerProps {
   setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
   setSleepTracker : React.Dispatch<React.SetStateAction<number>>;
   onRemainingTimeChange?: (remainingSeconds: number) => void; // New callback prop
+  isSleep: boolean;
 }
 
 export function Timer({
@@ -20,7 +21,8 @@ export function Timer({
   pomodoro,
   setIsRunning,
   setSleepTracker,
-  onRemainingTimeChange, // Destructure new prop
+  onRemainingTimeChange, // Destructure new prop to track the elapsed time
+  isSleep
 }: TimerProps) {
   const {
     seconds,
@@ -64,13 +66,19 @@ export function Timer({
     setIsRunning(isRunning);
   }, [isRunning, setIsRunning]);
 
+  useEffect(() => {
+    if (isSleep) {
+      pause();
+    }
+  }, [isSleep, pause]);
+
   return (
     <div style={{ textAlign: "center" }}>
       <div style={{ fontSize: "100px" }}>
         <span>{hours} h</span> : <span>{minutes} m</span> : <span>{seconds} s</span>
       </div>
       <p>{isRunning ? "Running" : "Not running"}</p>
-      {isRunning ? (
+      {isRunning && !isSleep ? (
         <button
           className="m-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           onClick={() => {
@@ -81,7 +89,7 @@ export function Timer({
         >
           Pause
         </button>
-      ) : (
+      ) : !isSleep ? (
         <button
           className="m-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           onClick={() => {
@@ -91,8 +99,8 @@ export function Timer({
         >
           Start
         </button>
-      )}
-      <button
+      ) : null}
+      {!isSleep && <button
         className="m-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         onClick={() => {
           const time = new Date();
@@ -112,7 +120,7 @@ export function Timer({
         }}
       >
         Restart
-      </button>
+      </button>}
     </div>
   );
 }
