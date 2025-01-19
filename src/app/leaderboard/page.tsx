@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabaseClient";
 export default function Leaderboard() {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [latestEntry, setLatestEntry] = useState(null); // To track the latest entry's timestamp
 
   // Fetch leaderboard data
   useEffect(() => {
@@ -13,7 +14,7 @@ export default function Leaderboard() {
       const { data, error } = await supabase
         .from("leaderboard")
         .select("name, duration, published")
-        .order("duration", { ascending: false }) // Sort by duration in descending order
+        .order("duration", { ascending: false }); // Sort by duration in descending order
 
       if (error) {
         console.error("Error fetching leaderboard:", error.message);
@@ -23,7 +24,14 @@ export default function Leaderboard() {
           ...player,
           rank: index + 1,
         }));
+
+        // Find the latest entry based on the "published" column
+        const latest = rankedData.reduce((latest, current) =>
+          new Date(latest.published) > new Date(current.published) ? latest : current
+        );
+
         setLeaderboardData(rankedData);
+        setLatestEntry(latest.published); // Store the latest published timestamp
       }
 
       setLoading(false);
@@ -59,7 +67,12 @@ export default function Leaderboard() {
         </thead>
         <tbody>
           {leaderboardData.map((player) => (
-            <tr key={player.rank} className="even:bg-gray-700 odd:bg-gray-800">
+            <tr
+              key={player.rank}
+              className={`${
+                player.published === latestEntry ? "bg-yellow-600 font-bold text-black" : "even:bg-gray-700 odd:bg-gray-800"
+              }`}
+            >
               <td className="border border-gray-300 px-4 py-2">{player.rank}</td>
               <td className="border border-gray-300 px-4 py-2">{player.name}</td>
               <td className="border border-gray-300 px-4 py-2">{player.duration}</td>

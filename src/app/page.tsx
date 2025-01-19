@@ -59,8 +59,8 @@ export default function Home() {
 
   const insertIntoLeaderboard = async (name: string, timeElapsed: number) => {
     const duration = timeElapsed;
-    console.log("Sending to supabase...")
-    // Insert the data into the leaderboard table
+    console.log("Sending to supabase...");
+  
     const { data, error } = await supabase
       .from("leaderboard")
       .insert([
@@ -68,14 +68,22 @@ export default function Home() {
           name,
           duration,
         },
-      ]);
+      ])
+      .select("id");
   
     if (error) {
       console.error("Error inserting into leaderboard:", error.message);
-    } else {
-      console.log("Successfully added to leaderboard:", data);
+      return null;
+    } else if (data && data.length > 0) {
+      const newId = data[0].id;
+      console.log("Successfully added to leaderboard with ID:", newId);
+  
+      // Store the ID in localStorage
+      localStorage.setItem("latestEntryId", newId);
+      return newId;
     }
-  }; 
+  };
+  
 
   const handleAddToLeaderboard = async () => {
     await insertIntoLeaderboard(name, timeElapsed);
